@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Add User Attributes</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">Add User Attributes</h1>
+      <form action="/add_user" method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" class="form-control" id="username" name="username">
+        </div>
+
+        <div class="mb-3">
+          <label for="average-rating" class="form-label">Average Rating:</label>
+          <input type="number" class="form-control" id="average-rating" name="average-rating" step="0.01">
+        </div>
+
+        <div class="mb-3">
+          <label for="reviews" class="form-label">Reviews:</label>
+          <textarea class="form-control" id="reviews" name="reviews" rows="5"></textarea>
+        </div>
+
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="admin" name="admin">
+          <label for="admin" class="form-check-label">Is Admin?</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Page Title</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+	<style>
+		body {
+			background-color: #f8f9fa;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			font-size: 2.5rem;
+			font-weight: 700;
+			color: #343a40;
+		}
+
+		h2 {
+			font-size: 1.5rem;
+			font-weight: 700;
+			color: #343a40;
+		}
+
+		h3 {
+			font-size: 1.25rem;
+			font-weight: 500;
+			color: #343a40;
+		}
+
+		.card {
+			border-radius: 15px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+		}
+
+		.review-rating {
+			display: inline-block;
+			width: 80px;
+			height: 20px;
+			background-color: #f0ad4e;
+			color: #fff;
+			text-align: center;
+			font-size: 12px;
+			line-height: 20px;
+			border-radius: 10px;
+			margin-right: 10px;
+		}
+
+		.review-rating--excellent {
+			background-color: #5cb85c;
+		}
+
+		.review-rating--good {
+			background-color: #f0ad4e;
+		}
+
+		.review-rating--fair {
+			background-color: #5bc0de;
+		}
+
+		.review-rating--poor {
+			background-color: #d9534f;
+		}
+
+		.review-rating--text {
+			font-weight: 500;
+			font-size: 14px;
+		}
+
+		.review-username {
+			font-weight: 500;
+			font-size: 14px;
+			color: #343a40;
+			margin-bottom: 5px;
+		}
+
+		.review-text {
+			font-size: 14px;
+			color: #6c757d;
+			margin-bottom: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="row">
+			<!-- Item Image Column -->
+			<div class="col-md-6 item-image">
+				<img src="{{item_data.image}}" alt="{{item_data.name}}" class="img-fluid">
+			</div>
+	
+			<!-- Item Attributes Column -->
+			<div class="col-md-6 item-attributes">
+				<h1 class="mb-4">Name: {{item_data.name}}</h1>
+	
+				<h2 class="mb-4">Description: {{item_data.description}}</h2>
+	
+				<h3 class="mb-4">Price: {{item_data.price}}</h3>
+	
+				<h3 class="mb-4">Seller: {{item_data.seller}}</h3>
+	
+				{% if item_data.type == "clothing"%}
+					<h3 class="mb-4">Size: {{item_data.size}}</h3>
+					<h3 class="mb-4">Color: {{item_data.color}}</h3>
+				{% endif %}
+	
+				{% if item_data.type == "computer_component"%}
+					<span class="label mb-3">Computer Component</span>
+					<h3 class="mb-4">Specs: {{item_data.spec}}</h3>
+				{% endif %}
+	
+				{% if item_data.type == "monitor"%}
+					<span class="label mb-3">Monitor</span>
+					<h3 class="mb-4">Specs: {{item_data.spec}}</h3>
+	
+				{% endif %}
+	
+	
+				<h3 class="mb-4">Average Rating: {{item_data.avg_rating}}</h3>
+	
+				<div class="mt-5">
+					<h2>Customer Reviews</h2>
+					<!-- Display reviews here -->
+					<p> </p>
+	
+					<!-- Review Form -->
+					<form action="/submit_review" method="post">
+						<label for="rating">Rating:</label>
+						<select id="rating" name="rating" style="font-size: 20px; padding: 5px;">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+						<br><br>
+						<label for="review" style="font-size: 20px;">Review:</label>
+						<textarea id="review" name="review" style="font-size: 20px; padding: 10px; height: 150px; width: 300;"></textarea>
+						<br><br>
+						<input type="submit" value="Submit" style="font-size: 20px; padding: 10px;">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Bootstrap JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+</body>
+</html>

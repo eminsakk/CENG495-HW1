@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Admin Site</title>
+    <style>
+      /* Add some basic styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      nav {
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+      nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+      }
+      .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="#">Admin Site</a>
+      </div>
+      <div>
+        <span>Welcome, {{ username }}</span>
+        <a href="#">Logout</a>
+      </div>
+    </nav>
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <p>Manage your users and items below:</p>
+      <div>
+        <a class="button" href="#" onclick="location.href='/add_user'">Add User</a>
+        <a class="button" href="#" onclick="location.href='/add_item'">Add Item</a>
+      </div>
+      <!-- Rest of your admin site content goes here -->
+    </div>
+  </body>
+</html>

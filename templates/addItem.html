@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Item</title>
+    <style>
+        /* Add some basic styling */
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        nav {
+          background-color: #333;
+          color: white;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+        }
+        nav a {
+          color: white;
+          text-decoration: none;
+          padding: 10px;
+        }
+        .button {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+        .button:hover {
+          background-color: #3e8e41;
+        }
+        /* Overall styles */
+
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        }
+
+        h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        }
+
+        form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2rem 0;
+        }
+
+        label {
+        display: block;
+        margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        width: 100%;
+        }
+
+        select {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        width: 100%;
+        }
+
+        button[type="submit"] {
+        padding: 1rem 2rem;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+        }
+
+        /* Specific item fields styles */
+
+        #clothing-fields,
+        #computer-component-fields,
+        #monitor-fields,
+        #snack-fields {
+        display: none;
+        }
+
+        #clothing-fields label,
+        #computer-component-fields label,
+        #monitor-fields label,
+        #snack-fields label {
+        font-weight: bold;
+        margin-top: 1.5rem;
+        }
+
+        #clothing-fields input[type="text"],
+        #computer-component-fields input[type="text"],
+        #monitor-fields input[type="text"],
+        #snack-fields input[type="text"] {
+        margin-top: 0.5rem;
+        }
+
+        #clothing-fields input[type="text"] {
+        width: 50%;
+        }
+
+        #clothing-fields input[type="text"]:nth-child(even) {
+        margin-left: 1rem;
+        }
+
+        #computer-component-fields input[type="text"],
+        #monitor-fields input[type="text"] {
+        width: 70%;
+        }
+
+        /* Visual elements */
+
+        form {
+        background-color: #f7f7f7;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        button[type="submit"] {
+        background-color: #007bff;
+        }
+
+        #item-type {
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        }
+
+        /* Show item fields based on selected item type */
+
+        #clothing-fields.show,
+        #computer-component-fields.show,
+        #monitor-fields.show,
+        #snack-fields.show {
+        display: block;
+        }
+      </style>
+</head>
+<body>
+	<h1>Add Item</h1>
+	<form action="/add_item" method="POST">
+		<label for="item-type">Select Item Type:</label>
+		<select name="item-type" id="item-type">
+            <option value="nothing"> </option>
+			<option value="clothing">Clothing</option>
+			<option value="computer_component">Computer Component</option>
+			<option value="monitor">Monitor</option>
+            <option value="snack">Snack</option>
+		</select>
+		<br>
+
+		<!-- Clothing item fields -->
+		<div id="clothing-fields" style="display: none;">
+			<label for="name">Name: <input type="text" id="name" name="name_clothing"> </label>
+            <br>  
+
+            <label for="desc">Description: <input type="text" id="desc" name="desc_clothing"></label>
+            <br>
+
+            <label for="price">Price: <input type="text" id="price" name="price_clothing"> </label>
+            <br>
+
+            <label for="seller">Seller: <input type="text" id="seller" name="seller_clothing"> </label>
+            <br>
+
+            <label for="image">Image Link: <input type="text" id="image" name="image_clothing"> </label>
+            <br>
+
+            <label for="size">Size: <input type="text" id="size" name="size_clothing"> </label>
+            <br>
+
+            <label for="color">Color: <input type="text" id="color" name="color_clothing"> </label>
+			
+		</div>
+
+
+		<!-- Computer Component item fields -->
+		<div id="computer-component-fields" style="display: none;">
+            <label for="name">Name: <input type="text" id="name" name="name_computer"> </label>
+            <br>  
+
+            <label for="desc">Description: <input type="text" id="desc" name="desc_computer"></label>
+            <br>
+
+            <label for="price">Price: <input type="text" id="price" name="price_computer"> </label>
+            <br>
+
+            <label for="seller">Seller: <input type="text" id="seller" name="seller_computer"> </label>
+            <br>
+
+            <label for="image">Image Link: <input type="text" id="image" name="image_computer"> </label>
+            <br>
+
+			<label for="spec">Specification: <input type="text" id="spec" name="spec_computer"> </label>
+			
+		</div>
+
+
+		<!-- Monitor item fields -->
+		<div id="monitor-fields" style="display: none;">
+			<label for="name">Name: <input type="text" id="name" name="name_monitor"> </label>
+            <br>  
+
+            <label for="desc">Description: <input type="text" id="desc" name="desc_monitor"></label>
+            <br>
+
+            <label for="price">Price: <input type="text" id="price" name="price_monitor"> </label>
+            <br>
+
+            <label for="seller">Seller: <input type="text" id="seller" name="seller_monitor"> </label>
+            <br>
+
+            <label for="image">Image Link: <input type="text" id="image" name="image_monitor"> </label>
+            <br>
+
+			<label for="spec">Specification: <input type="text" id="spec" name="spec_monitor"></label>
+			
+
+		</div>
+
+        <!-- Snack item fields -->
+        <div id="snack-fields" style="display: none;">
+            <label for="name">Name: <input type="text" id="name" name="name_snack"> </label>
+            <br>  
+
+            <label for="desc">Description: <input type="text" id="desc" name="desc_snack"></label>
+            <br>
+
+            <label for="price">Price: <input type="text" id="price" name="price_snack"> </label>
+            <br>
+
+            <label for="seller">Seller: <input type="text" id="seller" name="seller_snack"> </label>
+            <br>
+
+            <label for="image">Image Link: <input type="text" id="image" name="image_snack"> </label>
+            <br>
+        </div>
+
+		
+            <!-- form fields -->
+        <button type="submit">Add Item</button>
+	</form>
+    <script>
+        // listen for changes to the item type dropdown
+        document.querySelector('#item-type').addEventListener('change', function() {
+          var itemType = this.value;
+          
+          // dynamically generate input fields based on item type
+          if (itemType === 'clothing') {
+            var sizeInput = document.createElement('input');
+            sizeInput.type = 'text';
+            sizeInput.name = 'size';
+            sizeInput.placeholder = 'Size';
+            
+            var colorInput = document.createElement('input');
+            colorInput.type = 'text';
+            colorInput.name = 'color';
+            colorInput.placeholder = 'Color';
+            
+            var dynamicFields = document.querySelector('#dynamic-fields');
+            dynamicFields.innerHTML = '';
+            dynamicFields.appendChild(sizeInput);
+            dynamicFields.appendChild(colorInput);
+          } else if (itemType === 'computer_component' or itemType == 'monitor') {
+            var specInput = document.createElement('input');
+            specInput.type = 'text';
+            specInput.name = 'spec';
+            specInput.placeholder = 'Spec';
+            
+            var dynamicFields = document.querySelector('#dynamic-fields');
+            dynamicFields.innerHTML = '';
+            dynamicFields.appendChild(specInput);
+          } else {
+            var dynamicFields = document.querySelector('#dynamic-fields');
+            dynamicFields.innerHTML = '';
+          }
+        });
+        
+        // add the dynamic fields to the form data before submitting
+        document.querySelector('#my-form').addEventListener('submit', function() {
+          var dynamicFields = document.querySelector('#dynamic-fields');
+          var inputs = dynamicFields.querySelectorAll('input');
+          var formData = new FormData(this);
+          inputs.forEach(function(input) {
+            formData.append(input.name, input.value);
+          });
+          this.submit();
+        });
+    </script>
+
+	<script>
+		const itemTypeSelect = document.getElementById('item-type');
+		const clothingFields = document.getElementById('clothing-fields');
+		const computerComponentFields = document.getElementById('computer-component-fields');
+		const monitorFields = document.getElementById('monitor-fields');
+        const snackFields = document.getElementById('snack-fields');
+
+		itemTypeSelect.addEventListener('change', (event) => {
+			const selectedValue = event.target.value;
+
+			// Hide all fields
+			clothingFields.style.display = 'none';
+			computerComponentFields.style.display = 'none';
+			monitorFields.style.display = 'none';
+            snackFields.style.display = 'none';
+
+			// Show fields based on selected value
+			if (selectedValue === 'clothing') {
+				clothingFields.style.display = 'block';
+			} else if (selectedValue === 'computer_component') {
+				computerComponentFields.style.display = 'block';
+			} else if (selectedValue === 'monitor') {
+				monitorFields.style.display = 'block';
+			} else if(selectedValue === 'snack'){
+                snackFields.style.display = 'block';
+            }
+		});
+	</script>
+</body>
+</html>

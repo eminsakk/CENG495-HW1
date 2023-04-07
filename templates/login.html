@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Login Form</title>
+    <title>Login BuyIn</title>
     <style>
       body {
         display: flex;
@@ -27,13 +27,14 @@
     <form method="POST" action="/login">
       <h1>Login</h1>
       {% if message %}
-        <p style="color: red">{{ message }}</p>
+        <p style="color: {{color}}">{{ message }}</p>
       {% endif %}
       <label for="username">Username:</label>
       <input type="text" id="username" name="username"><br><br>
       <label for="password">Password:</label>
       <input type="password" id="password" name="password"><br><br>
       <input type="submit" value="Login">
+      <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
     </form>
   </body>
 </html>

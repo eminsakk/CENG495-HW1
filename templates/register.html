@@ -31,6 +31,15 @@
         <p style="color: red">{{ message }}</p>
       {% endif %}
 
+      
+      <script>
+        const messageElement = document.getElementById('message');
+        if (messageElement && messageElement.innerText === 'You successfully registered.') {
+          messageElement.style.color = 'green';
+        }
+      </script>
+
+      
       <label for="username">Username:</label>
       <input type="text" id="username" name="username"><br>
 
@@ -41,6 +50,31 @@
       <input type="password" id="password" name="password2"><br>
 
       <input type="submit" value="Login">
+
+      <script>
+        // handle the form submission
+        document.getElementById('register-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/register', {
+                method: 'POST',
+                body: new FormData(event.target)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // update the message field
+                document.getElementById('message').textContent = data.message;
+                // redirect to the login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+      </script>
+
+
     </form>
   </body>
 </html>

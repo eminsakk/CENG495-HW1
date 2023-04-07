@@ -12,19 +12,6 @@ def get_database():
     return db
 
 
-def createCollections():
-    db = get_database()
-    try:
-        db.create_collection("users")
-        db.create_collection("items")
-        db.create_collection("reviews")
-    except Exception as e:
-        
-        pass
-    return db.list_collection_names()
-
-
-
 # user_data format:
 # {
 #    "username": "test",
@@ -45,5 +32,23 @@ def insert_user(user_data):
     result = users.insert_one(user_data)
     return result.inserted_id
     
-    
-    
+def insert_item(item_data):
+    db = get_database()
+    items = db.items
+    result = items.insert_one(item_data)
+    return result.inserted_id
+
+
+def remove_user(username):
+    db = get_database()
+    users = db.users
+    result = users.delete_one({"username": username})
+    return result.deleted_count
+
+
+def get_collection_items(collection_name):
+    db = get_database()
+    collection = db[collection_name]
+    cursor = collection.find({})
+    items = [item for item in cursor]
+    return items

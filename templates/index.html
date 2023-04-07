@@ -1,9 +1,179 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
+    <script>
+        function redirect_to_account() {
+          window.location.href = '/account';
+        }
+    </script>
+  <head>
+    <title>My Web Page</title>
+    <style>
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: lightgray;
+        padding: 10px;
+      }
+      
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 32px;
+        margin: 20px;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        border-bottom: 1px solid #ccc;
+        margin: 10px 0;
+        padding: 10px;
+      }
+
+      button {
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        font-size: 16px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #006080;
+      }
+      /* Style the container for the items */
+      .item-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      /* Style the image within each item */
+      .item img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Style the name of each item within the item cell */
+      .item-name {
+        margin-top: 10px;
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      
+      /* Style the account button */
+      .account-button {
+        margin: 20px;
+        padding: 10px;
+        border: 1px solid black;
+        background-color: lightgray;
+        cursor: pointer;
+        float: right;
+      }
+      .item-container {
+        margin: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      /* Style each item */
+      .item {
+        width: 15%;
+        margin: 20px;
+        border: 3px solid black;
+        text-align: center;
+        border-radius: 0;
+        position: relative; 
+      }
+
+      
+      /* Style the image within each item */
+      .item img {
+        width: auto;
+        height: auto;
+      }
+      
+      /* Style the name of each item within the item cell */
+      .item-name {
+        margin-top: 10px;
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      
+      /* Style the account button */
+      .account-button {
+        margin: 20px;
+        padding: 10px;
+        border: 1px solid black;
+        background-color: lightgray;
+        cursor: pointer;
+        float: right;
+      }
+
+      .greetings{
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div class="logo">BuyIn</div>
+      {% if user == None %}
+        
+        <div class="greetings">Hello, please sign in!</div>
+        <button class="account-button" id="acc-button" onclick="redirect_to_account()">Login</button>
+        <button class="account-button" id="acc-button" onclick="location.href='/register'">Register</button>
+      {% else %}
+        <div class="greetings">Hello, {{ user }}!</div>
+        <button class="account-button" id="acc-button" onclick="redirect_to_account()">Account</button>
+        <button class="account-button" id="acc-button" onclick="location.href='/logout'">Logout</button>
+      {% endif %}
+
+    </div>
+    
+
+    <div class="item-container">
+      <!-- Iterate through each item in your MongoDB collection and generate an item cell for each -->
+      <!-- Replace the URLs and placeholders with your actual data from MongoDB -->
+
+      {% for item in items %}
+        <div class="item">
+          <a href="/item/{{ item._id }}">
+            <img src="{{ item.image }}">
+            <div class="item-name">{{ item.name }}</div>
+          </a>
+        </div>
+      {% endfor %}  
+
+    </div>  
+    
+  </body>
 </html>
