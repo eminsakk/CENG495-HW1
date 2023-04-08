@@ -28,7 +28,7 @@
         text-decoration: none;
         padding: 10px;
       }
-      .button {
+      .button-green {
         background-color: #4CAF50;
         border: none;
         color: white;
@@ -39,8 +39,25 @@
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
+        margin-right: 10px;
       }
-      .button:hover {
+      
+      .button-red {
+        background-color: #FF0000; /* Change to red */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      
+      /* Add hover effect to both buttons */
+      .button-green:hover, .button-red:hover {
         background-color: #3e8e41;
       }
     </style>
@@ -52,17 +69,28 @@
       </div>
       <div>
         <span>Welcome, {{ username }}</span>
-        <a href="#">Logout</a>
+        <a href="#" onclick="location.href='/logout'">Logout</a>
       </div>
     </nav>
     <div class="container">
       <h1>Admin Dashboard</h1>
-      <p>Manage your users and items below:</p>
-      <div>
-        <a class="button" href="#" onclick="location.href='/add_user'">Add User</a>
-        <a class="button" href="#" onclick="location.href='/add_item'">Add Item</a>
+      <div class="row mt-5">
+        <div class="col-md-4">
+          <img width="200" height="auto" src="https://previews.123rf.com/images/vectorv/vectorv1907/vectorv190705113/126176625-orange-profile-settings-icon-on-white-background-user-setting-icon-profile-avatar-with-cogwheel.jpg" alt="Profile Picture" class="img-fluid rounded-circle">
+        </div>
+        <div class="col-md-8 d-flex align-items-center justify-content-between">
+          <h2>{{ username }}</h2>
+          <div>
+            <p>Manage your users and items below:</p>
+            <a class="button-green" href="#" onclick="location.href='/add_user'">Add User</a>
+            <a class="button-green" href="#" onclick="location.href='/add_item'">Add Item</a>
+            <a class="button-red" href="#" onclick="location.href='/remove_user'">Remove User</a>
+            <a class="button-red" href="#" onclick="location.href='/remove_item'">Remove Item</a>
+            <a class="button-red" href="#" onclick="location.href='/'">Go to Home Page</a>
+          </div>
+        </div>
       </div>
-      <!-- Rest of your admin site content goes here -->
+
     </div>
   </body>
 </html>

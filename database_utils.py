@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson import ObjectId
 
 
 
@@ -45,6 +46,12 @@ def remove_user(username):
     result = users.delete_one({"username": username})
     return result.deleted_count
 
+def remove_item(item_id):
+    db = get_database()
+    users = db.items
+    result = users.delete_one({"_id": ObjectId(item_id)})
+    return result.deleted_count
+
 
 def get_collection_items(collection_name):
     db = get_database()
@@ -52,3 +59,13 @@ def get_collection_items(collection_name):
     cursor = collection.find({})
     items = [item for item in cursor]
     return items
+
+def is_eligible(username):
+    db = get_database()
+    collection = db.users
+    
+    if collection.find_one({"username": username}) is not None:
+        return False
+    
+    return True
+    

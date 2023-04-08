@@ -12,95 +12,109 @@ from bson import ObjectId
 app = Flask(__name__)
 app.config["SECRET_KEY"] = '64a0f61a16b51b71f9cf959bc11cdf11cb646b40'
 db = database_utils.get_database()
-authenticated_user,isAdmin = None,None
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    global authenticated_user
-    global isAdmin
-    message = session.pop('message', None)
-    color = session.pop('color', None)
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        
-        user = db.users.find_one({'username': username})
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
-            session['username'] = username
-            session['isAdmin'] = user['is_admin']
-            
-            return redirect(url_for('index', user=username))
-        else:
-            message = 'Invalid username or password'
-            color = 'red'
-            return render_template('login.html', message=message,color=color)    
-    return render_template('login.html', message=message,color=color)
-
-@app.route('/admin_page', methods=['GET', 'POST'])
-def admin_page():
-    return render_template('test.html', username=authenticated_user)
+###
+###   Kalan fonksiyonaliteler:
+###   - Userların review yapması daha sonrasında kendi average ratignlerini hesaplamak.
+###   - Item veya user silindiğinde gerekli review kısımlarında ve ratinglerde değişiklik yapmak. 
+###
 
 
+
+
+
+
+###
+###
+###  HELPER FUNCTION.
+###
+###
 @app.route('/account')
 def redirect_to_account():
     username = session.pop('username', None)
     if username is not None:
-        if isAdmin:
-            return render_template('admin_page.html', username=authenticated_user)
+        session['username'] = username
+        
+        if session['isAdmin']:
+            return render_template('admin_page.html', username=username)
         else:
-            return render_template('admin_page.html',username=authenticated_user)
-    else:
-        return redirect(url_for('login'))
+            return render_template('.html',username=username)
 
+    return redirect(url_for('login'))
+
+
+
+###
+###
+###  HOME PAGE.
+###
+###
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # Get items in the database.
-    
-    user_auth = request.args.get('user')
+    # Get all items from the database.
     db = database_utils.get_database()
     collection = db['items']
     cursor = collection.find({})
     items = [item for item in cursor]
     
-    user_collection = db['users']
-    cursor = user_collection.find({})
-    users = [user for user in cursor]
-    # Render the index.html template with the items as a context variable.
-    # return render_template('remove_user.html',users=users)
-    return render_template('index.html', items=items,user=user_auth)
-
-
-def default_item__data(item_type, item_name, item_description, item_price, item_seller, item_image):
+    if session.get('username') is None:
+        return render_template('index.html',items=items ,user=None)
     
-    return {
-        "name": item_name,
-        "description": item_description,
-        "price": item_price,
-        "seller": item_seller,
-        "image": item_image,
-        "type" : item_type
-    }
+    return render_template('index.html', items=items,user=session.get('username'))
 
+
+
+
+###
+###
+###  BASIC ITEM PAGE.
+###
+###
+
+@app.route('/item/<item_id>', methods=['GET', 'POST'])
+def item_page(item_id):
+
+    database_utils.get_database()
+    items = db.items
+    item_data = items.find_one({'_id': ObjectId(item_id)})
+    
+    return render_template('item.html', item_data=item_data)
+
+
+
+
+###
+###
+### ADMIN CAPABILITIES.
+###
+###
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     
-    
     message = ""
     if request.method == "POST":
         username = request.form.get('username')
-        avg_rating = request.form.get('average-rating')
-        reviews = request.form.get('reviews')
         is_admin = request.form.get('admin') == 'on'
-        
-        # Check if the username is already taken.
-    
+        password = ""
+        # Check if the username is already taken.   
+        if database_utils.is_eligible(username):
+            user_data = {
+                "username": username,
+                "password": bcrypt.hashpw(request.form.get('password').encode('utf-8'), bcrypt.gensalt()),
+                "avg_rating": 0,
+                "reviews": [],
+                "is_admin": is_admin,
+            }
+            
+            message = "User successfully added."
+            database_utils.insert_user(user_data)
+            
+            
     return render_template('add_user.html', message=message)
-
-
 
 @app.route('/add_item', methods=['GET', 'POST'])
 def add_item():
@@ -156,6 +170,7 @@ def add_item():
         elif item_type == 'monitor':
             item["spec"] = request.form['spec_monitor']
         
+        item["reviews"] = []
         
         try:
             database_utils.insert_item(item)
@@ -173,22 +188,6 @@ def add_item():
     
     return render_template('addItem.html')
 
-
-
-
-@app.route('/item/<item_id>', methods=['GET', 'POST'])
-def item_page(item_id):
-
-    database_utils.get_database()
-    items = db.items
-    item_data = items.find_one({'_id': ObjectId(item_id)})
-    
-    reviews = item_data['reviews']
-        
-    
-    return render_template('item.html', item_data=item_data)
-    
-    
 @app.route('/remove_user', methods=['GET', 'POST'])
 def remove_user():
     
@@ -211,6 +210,54 @@ def remove_user():
         
     return render_template('remove_user.html', message=message, users=users)
 
+@app.route('/remove_item', methods=['GET', 'POST'])
+def remove_item():
+    
+    message = ""
+    items = database_utils.get_collection_items('items')
+    if request.method == 'POST':
+        
+        # Admin check.
+        if session['isAdmin']:
+            to_deleted_item_id = request.form['item_id']
+            print(request.form)
+            try:
+                database_utils.remove_item(to_deleted_item_id)
+                items = database_utils.get_collection_items('items')
+                message = 'Item successfully removed.'
+                return render_template('remove_item.html', message=message, items=items)
+            
+            except Exception as e:
+                print(e)
+                message = 'Error during item removing. Nothing changed.'
+                return render_template('remove_item.html', message=message, items=items)
+        
+    return render_template('remove_item.html', message=message, items=items)
+
+
+
+
+
+    
+def default_item__data(item_type, item_name, item_description, item_price, item_seller, item_image):
+    
+    return {
+        "name": item_name,
+        "description": item_description,
+        "price": item_price,
+        "seller": item_seller,
+        "image": item_image,
+        "type" : item_type
+    }
+
+
+
+
+###
+###
+###    LOGIN, REGISTER, LOGOUT FUNCTIONALITIES.
+###
+###
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -250,13 +297,34 @@ def register():
         
     return render_template('register.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    message = session.pop('message', None)
+    color = session.pop('color', None)
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        
+        user = db.users.find_one({'username': username})
+
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+            session['username'] = username
+            session['isAdmin'] = user['is_admin']
+            return redirect(url_for('index', user=username))
+        
+        else:
+            message = 'Invalid username or password'
+            color = 'red'
+            return render_template('login.html', message=message,color=color)    
+    
+    return render_template('login.html', message=message,color=color)
 
 @app.route('/logout')
 def logout():
-    global authenticated_user,isAdmin
-    authenticated_user,isAdmin = None,None
-    session.pop('username', None)
+    session.clear()
+    time.sleep(1.5)
     return redirect(url_for('login'))
+
 
 
 
