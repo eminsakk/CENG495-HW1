@@ -22,10 +22,6 @@ db = database_utils.get_database()
 ###
 
 
-
-
-
-
 ###
 ###
 ###  HELPER FUNCTION.
@@ -66,7 +62,6 @@ def index():
 
 
 
-
 ###
 ###
 ###  BASIC ITEM PAGE.
@@ -76,13 +71,42 @@ def index():
 @app.route('/item/<item_id>', methods=['GET', 'POST'])
 def item_page(item_id):
 
+
+
     database_utils.get_database()
     items = db.items
     item_data = items.find_one({'_id': ObjectId(item_id)})
     
-    return render_template('item.html', item_data=item_data)
+    review_data = database_utils.get_reviews_for_item(item_id)
+    reviews = review_data[0]
+    avg_rating = review_data[1]
+    
+    
+    return render_template('item.html', item_data=item_data,reviews=reviews,avg_rating=avg_rating)
 
 
+@app.route('/submit_review', methods=['POST'])
+def submit_review():
+    message = ""
+    if request.method == 'POST':
+        item_id = request.form['item_id']
+        content = request.form['content']
+        rate = request.form['rating']
+        
+        try:   
+            review_object_id = database_utils.insert_review(content, session['username'],rate,item_id)
+            is_submitted = database_utils.add_reviews_to_user(session['username'], review_object_id)
+            if is_submitted:
+                message = "Review successfully added."
+            else:
+                message = "Error during review adding to user."
+            
+        except Exception as e:
+            print(e)
+            message = "Error during review adding."
+
+
+    return redirect(url_for('item_page', item_id=item_id))
 
 
 ###
@@ -100,11 +124,12 @@ def add_user():
         username = request.form.get('username')
         is_admin = request.form.get('admin') == 'on'
         password = ""
-        # Check if the username is already taken.   
+        # Check if the username is already taken. 
+          
         if database_utils.is_eligible(username):
             user_data = {
                 "username": username,
-                "password": bcrypt.hashpw(request.form.get('password').encode('utf-8'), bcrypt.gensalt()),
+                "password": bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()),
                 "avg_rating": 0,
                 "reviews": [],
                 "is_admin": is_admin,
@@ -194,13 +219,13 @@ def remove_user():
     message = ""
     users = database_utils.get_collection_items('users')
     
-    
     if request.method == 'POST':
         to_deleted_username = request.form['username']
-        print(request.form)
+
         try:
             database_utils.remove_user(to_deleted_username)
             users = database_utils.get_collection_items('users')
+            deleted_count = database_utils.remove_reviews_username(to_deleted_username)
             message = 'User successfully removed.'
             return render_template('remove_user.html', message=message, users=users)
         
@@ -220,10 +245,12 @@ def remove_item():
         # Admin check.
         if session['isAdmin']:
             to_deleted_item_id = request.form['item_id']
-            print(request.form)
+            
             try:
                 database_utils.remove_item(to_deleted_item_id)
                 items = database_utils.get_collection_items('items')
+                deleted_item_count = database_utils.remove_reviews_item(to_deleted_item_id)
+                
                 message = 'Item successfully removed.'
                 return render_template('remove_item.html', message=message, items=items)
             
@@ -233,11 +260,6 @@ def remove_item():
                 return render_template('remove_item.html', message=message, items=items)
         
     return render_template('remove_item.html', message=message, items=items)
-
-
-
-
-
     
 def default_item__data(item_type, item_name, item_description, item_price, item_seller, item_image):
     
@@ -252,13 +274,11 @@ def default_item__data(item_type, item_name, item_description, item_price, item_
 
 
 
-
 ###
 ###
 ###    LOGIN, REGISTER, LOGOUT FUNCTIONALITIES.
 ###
 ###
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -303,7 +323,7 @@ def login():
     color = session.pop('color', None)
     if request.method == "POST":
         username = request.form['username']
-        password = request.form['password']
+        password = request.form['password'] if request.form['password'] else ""
         
         user = db.users.find_one({'username': username})
 
@@ -324,8 +344,6 @@ def logout():
     session.clear()
     time.sleep(1.5)
     return redirect(url_for('login'))
-
-
 
 
 

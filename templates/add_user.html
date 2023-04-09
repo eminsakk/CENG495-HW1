@@ -10,6 +10,9 @@
     <div class="container">
       <h1 class="mt-5">Add User Attributes</h1>
       <form action="/add_user" method="POST">
+        {% if message %}
+          <div class="alert alert-success mt-3">{{ message }}</div>
+        {% endif %}
         <div class="mb-3">
           <label for="username" class="form-label">Username:</label>
           <input type="text" class="form-control" id="username" name="username">
