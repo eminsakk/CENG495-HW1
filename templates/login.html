@@ -36,5 +36,13 @@
       <input type="submit" value="Login">
       <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
     </form>
+
+    <form method="POST" action="/">
+      <div style="text-align: center;"> <!-- Add a div with text-align:center to center the "Go to Homepage" link -->
+        <a color="green" href="{{ url_for('index') }}">Go to Homepage.</a>
+      </div>
+    </form>
+
+
   </body>
 </html>

@@ -17,8 +17,8 @@ db = database_utils.get_database()
 
 ###
 ###   Kalan fonksiyonaliteler:
-###   - Userların review yapması daha sonrasında kendi average ratignlerini hesaplamak.
-###   - Item veya user silindiğinde gerekli review kısımlarında ve ratinglerde değişiklik yapmak. 
+###   - User page ve yaptıkları commentleri gösterme.
+###   - Filtreleme olayı yapılacak.
 ###
 
 
@@ -72,7 +72,6 @@ def index():
 def item_page(item_id):
 
 
-
     database_utils.get_database()
     items = db.items
     item_data = items.find_one({'_id': ObjectId(item_id)})
@@ -82,7 +81,7 @@ def item_page(item_id):
     avg_rating = review_data[1]
     
     
-    return render_template('item.html', item_data=item_data,reviews=reviews,avg_rating=avg_rating)
+    return render_template('item.html', item_data=item_data,reviews=reviews,avg_rating=avg_rating,user=session.get('username'))
 
 
 @app.route('/submit_review', methods=['POST'])

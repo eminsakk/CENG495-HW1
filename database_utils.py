@@ -100,7 +100,7 @@ def get_reviews_for_item(item_id):
     for review in reviews:
         avg_rating += int(review["rating"])
         
-    avg_rating /= len(reviews)
+    avg_rating = (avg_rating / len(reviews)) if len(reviews) != 0 else 0
     avg_rating = float("{:.2f}".format(avg_rating))
     
     return reviews,avg_rating

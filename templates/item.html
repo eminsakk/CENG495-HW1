@@ -55,21 +55,23 @@
 						</div>
 					{% endfor %}
 					<!-- Review Form -->
-					<form action= "/submit_review"method="post">
-						<input type="hidden" name="item_id" value="{{ item_data._id }}">
-						<label for="rating">Rating:</label>
-						<select id="rating" name="rating" style="font-size: 20px; padding: 5px;">
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-						<br><br>
-						<label for="review" style="font-size: 20px;">Review:</label>
-						<textarea name="content"></textarea>
-						<button onclick="submit_review()" type="submit">Send</button>
-					</form>
+					{% if user  %}
+						<form action= "/submit_review"method="post">
+							<input type="hidden" name="item_id" value="{{ item_data._id }}">
+							<label for="rating">Rating:</label>
+							<select id="rating" name="rating" style="font-size: 20px; padding: 5px;">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<br><br>
+							<label for="review" style="font-size: 20px;">Review:</label>
+							<textarea name="content"></textarea>
+							<button onclick="submit_review()" type="submit">Send</button>
+						</form>
+					{% endif %}
 					
 				</div>
 			</div>
