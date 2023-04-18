@@ -29,14 +29,14 @@ db = database_utils.get_database()
 ###
 @app.route('/account')
 def redirect_to_account():
-    username = session.pop('username', None)
-    if username is not None:
-        session['username'] = username
+    username = session.get('username') if session.get('username') is not None else None
+    if username is not None:        
+        user_reviews,avg_rating = database_utils.get_reviews_using_username(username)
         
         if session['isAdmin']:
-            return render_template('admin_page.html', username=username)
+            return render_template('admin_page.html', username=username, reviews=user_reviews)
         else:
-            return render_template('.html',username=username)
+            return render_template('user_page.html',username=username,reviews=user_reviews,rating=avg_rating)
 
     return redirect(url_for('login'))
 
@@ -94,11 +94,15 @@ def submit_review():
         
         try:   
             review_object_id = database_utils.insert_review(content, session['username'],rate,item_id)
-            is_submitted = database_utils.add_reviews_to_user(session['username'], review_object_id)
-            if is_submitted:
-                message = "Review successfully added."
+            if review_object_id is not None:
+                is_submitted = database_utils.add_reviews_to_user(session['username'], review_object_id)
+            
+                if is_submitted:
+                    message = "Review successfully added."
+                else:
+                    message = "Error during review adding to user."
             else:
-                message = "Error during review adding to user."
+                message = "Your review edited successfully."
             
         except Exception as e:
             print(e)

@@ -69,10 +69,18 @@ def is_eligible(username):
 def insert_review(content,username,rating,item_id):
     db = get_database()
     collection = db.reviews
+    latest_review = collection.find_one({"username": username,
+                                         "item_id":item_id})
+    
+    if latest_review is not None:
+        query = {"username": username}
+        new_values = {"$set": {"content":content,"rating":rating}}
+        collection.update_one(query,new_values)
+        return None
+
+
     result = collection.insert_one({"content":content,"username":username,"rating":rating,"item_id":item_id})
     return result.inserted_id
-
-
 
 def add_reviews_to_user(username,review_id):
     db = get_database()
@@ -88,7 +96,20 @@ def add_reviews_to_user(username,review_id):
     
     return True
         
+def get_reviews_using_username(username):
+    db = get_database()
+    collection = db.reviews
+    cursor = collection.find({"username":username})
+    reviews = [review for review in cursor]
     
+    avg_rating = 0
+    for review in reviews:
+        avg_rating += int(review["rating"])
+    
+    avg_rating = (avg_rating / len(reviews)) if len(reviews) != 0 else 0
+    avg_rating = float("{:.2f}".format(avg_rating))
+    
+    return reviews,avg_rating
     
 def get_reviews_for_item(item_id):
     db = get_database()

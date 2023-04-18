@@ -134,6 +134,13 @@
         cursor: pointer;
         float: right;
       }
+      
+      .filter-container {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        margin: 20px;
+      }
 
       .greetings{
         font-size: 24px;
@@ -160,7 +167,8 @@
 
     </div>
     
-    <div>
+    <div class="filter-container">
+      <h4> Filter by category: </h4>
       <select id="filter-select">
         <option value="">All Items</option>
         <option value="clothings">Clothing</option>

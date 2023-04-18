@@ -41,7 +41,10 @@
         cursor: pointer;
         margin-right: 10px;
       }
-      
+      .my-heading {
+        padding-left: 40px; 
+        padding-bottom: 20px;
+      }
       .button-red {
         background-color: #FF0000; /* Change to red */
         border: none;
@@ -61,7 +64,9 @@
         background-color: #3e8e41;
       }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
   </head>
+  
   <body>
     <nav>
       <div>
@@ -77,9 +82,10 @@
       <div class="row mt-5">
         <div class="col-md-4">
           <img width="200" height="auto" src="https://previews.123rf.com/images/vectorv/vectorv1907/vectorv190705113/126176625-orange-profile-settings-icon-on-white-background-user-setting-icon-profile-avatar-with-cogwheel.jpg" alt="Profile Picture" class="img-fluid rounded-circle">
+          <h2 class="my-heading"> {{ username }}</h2>
         </div>
         <div class="col-md-8 d-flex align-items-center justify-content-between">
-          <h2>{{ username }}</h2>
+          
           <div>
             <p>Manage your users and items below:</p>
             <a class="button-green" href="#" onclick="location.href='/add_user'">Add User</a>
@@ -89,6 +95,15 @@
             <a class="button-red" href="#" onclick="location.href='/'">Go to Home Page</a>
           </div>
         </div>
+        <h1>Reviews:</h1>
+            {% for review in reviews %}
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{item_name}} - {{review.rating}}</h5>
+                  <p class="card-text">{{review.content}}</p>
+                </div>
+              </div>
+            {% endfor %}
       </div>
 
     </div>
