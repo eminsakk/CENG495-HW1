@@ -70,10 +70,10 @@ def insert_review(content,username,rating,item_id):
     db = get_database()
     collection = db.reviews
     latest_review = collection.find_one({"username": username,
-                                         "item_id": ObjectId(item_id)})
+                                         "item_id": item_id})
     
     if latest_review is not None:
-        query = {"username": username}
+        query = {"username": username,"item_id": item_id}
         new_values = {"$set": {"content":content,"rating":rating}}
         collection.update_one(query,new_values)
         return None
