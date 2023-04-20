@@ -14,19 +14,13 @@ app.config["SECRET_KEY"] = '64a0f61a16b51b71f9cf959bc11cdf11cb646b40'
 db = database_utils.get_database()
 
 
-
-###
-###   Kalan fonksiyonaliteler:
-###   - User page ve yaptıkları commentleri gösterme.
-###   - Filtreleme olayı yapılacak.
-###
-
-
 ###
 ###
 ###  HELPER FUNCTION.
 ###
 ###
+
+
 @app.route('/account')
 def redirect_to_account():
     username = session.get('username') if session.get('username') is not None else None
@@ -34,13 +28,11 @@ def redirect_to_account():
         user_reviews,avg_rating = database_utils.get_reviews_using_username(username)
         
         if session['isAdmin']:
-            return render_template('admin_page.html', username=username, reviews=user_reviews)
+            return render_template('admin_page.html', username=username, reviews=user_reviews,rating=avg_rating)
         else:
             return render_template('user_page.html',username=username,reviews=user_reviews,rating=avg_rating)
 
     return redirect(url_for('login'))
-
-
 
 ###
 ###
@@ -340,7 +332,8 @@ def login():
             color = 'red'
             return render_template('login.html', message=message,color=color)    
     
-    return render_template('login.html', message=message,color=color)
+    if request.method == "GET":
+        return render_template('login.html', message=message,color=color)
 
 @app.route('/logout')
 def logout():
