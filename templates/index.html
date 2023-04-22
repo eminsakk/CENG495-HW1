@@ -20,7 +20,6 @@
       .logo {
         font-size: 24px;
         font-weight: bold;
-        cursor: pointer;
       }
 
       body {
@@ -145,7 +144,6 @@
       .greetings{
         font-size: 24px;
         font-weight: bold;
-        cursor: pointer;
         margin-left: auto;
         margin-right: auto;
       }
@@ -153,7 +151,7 @@
   </head>
   <body>
     <div class="toolbar bg-dark text-light">
-      <div class="logo h4 mb-0">BuyIn</div>
+      <div class="logo h4 mb-0" onclick="index()">BuyIn</div>
       {% if user == None %}
         
         <div class="greetings">Hello, please sign in!</div>
