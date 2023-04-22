@@ -16,10 +16,8 @@ password. If there will be an error with similarity of the passwords error messa
 and I save it as it is. Users can see these ratings and empty comments.
 - There is a bug that I can not fix it yet. It is basically when user logout the account it is successfully directed to login page of the system.
 However If she/he uses the back button in the top left of the browser, user logged in again secretively. I think that this bug is because of the unproper 
-implementation of the POST and GET forms of the routes however I could not fix it.  
+implementation of the POST and GET forms of the routes however I could not fix it. This bug also occurs in comment. After sending rating and review, when I hit the browser back button, my review and rating come to the screen. After second hit, it works properly
 - app.py file mainly includes routes and Flask based implementations. database_utils.py file mainly includes PyMongo usage.
-
-
 
 
 
